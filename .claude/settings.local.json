@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"node -v\")",
+      "Bash(powershell -Command \"winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements\")",
+      "Bash(powershell -Command \"$env:Path = [Environment]::GetEnvironmentVariable\\(''Path'', ''Machine''\\) + '';'' + [Environment]::GetEnvironmentVariable\\(''Path'', ''User''\\); Set-Location ''C:\\\\Users\\\\guilherme.correa\\\\Desktop\\\\ferramenta_de_pdi''; Remove-Item -Recurse -Force node_modules -ErrorAction SilentlyContinue; Remove-Item -Force package-lock.json -ErrorAction SilentlyContinue; node -v; npm install\")"
+    ]
+  }
+}
