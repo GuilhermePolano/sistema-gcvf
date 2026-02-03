@@ -1,6 +1,6 @@
-# Sistema GCVF - FIERGS
+# Sistema GCVF
 
-Sistema de Gestão de Ciclo de Vida do Funcionário desenvolvido para a FIERGS (Federação das Indústrias do Estado do Rio Grande do Sul).
+Sistema de Gestão de Ciclo de Vida do Funcionário
 
 ## 🎯 Sobre o Projeto
 
@@ -22,7 +22,7 @@ O Sistema GCVF é uma plataforma web responsiva para gerenciar o ciclo completo 
 
 ## 🎨 Design System
 
-### Cores Principais (Identidade FIERGS)
+### Cores Principais
 - **Azul Primário**: `#003366` (azul institucional)
 - **Azul Secundário**: `#0066CC` (azul médio)
 - **Azul Claro**: `#E6F2FF` (backgrounds)
@@ -44,7 +44,7 @@ O Sistema GCVF é uma plataforma web responsiva para gerenciar o ciclo completo 
 1. **Clone o repositório**
 ```bash
 git clone <url-do-repositorio>
-cd sistema-gcvf-fiergs
+cd sistema-gcvf
 ```
 
 2. **Instale as dependências**
@@ -141,7 +141,7 @@ O sistema suporta 4 perfis diferentes com permissões específicas:
 - Exportação de relatórios
 
 ### 4. **Login**
-- Interface moderna com identidade FIERGS
+- Interface moderna
 - Validação em tempo real
 - Opções de recuperação de senha
 - Informações de suporte
@@ -149,7 +149,7 @@ O sistema suporta 4 perfis diferentes com permissões específicas:
 ## 🎯 Funcionalidades Implementadas
 
 ### ✅ Concluído
-- [x] Sistema de design com cores FIERGS
+- [x] Sistema de design
 - [x] Layout responsivo (Header + Sidebar)
 - [x] Dashboard do funcionário
 - [x] Lista de funcionários com filtros
@@ -175,7 +175,7 @@ As cores podem ser modificadas no arquivo `src/styles/globals.css` nas variávei
 
 ```css
 :root {
-  --primary-dark: #003366;    /* Azul FIERGS */
+  --primary-dark: #003366;    /* Azul */
   --primary-medium: #0066CC;  /* Azul médio */
   --primary-light: #E6F2FF;   /* Azul claro */
   /* ... outras variáveis */
@@ -220,17 +220,3 @@ Para contribuir com o projeto:
 3. Commit suas mudanças (`git commit -am 'Adiciona nova funcionalidade'`)
 4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto é propriedade da FIERGS - Federação das Indústrias do Estado do Rio Grande do Sul.
-
-## 📞 Suporte
-
-Para suporte técnico:
-- **Email**: suporte.ti@fiergs.org.br
-- **Telefone**: (51) 3347-8800
-
----
-
-**Desenvolvido com ❤️ para a FIERGS**
