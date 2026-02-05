@@ -140,7 +140,16 @@ O sistema suporta 4 perfis diferentes com permissões específicas:
 - Estatísticas e identificação de gaps
 - Exportação de relatórios
 
-### 4. **Login**
+### 4. **Sistema de Feedbacks**
+- **Para Funcionários**: Autoavaliações e visualização de feedbacks recebidos
+- **Para Coordenadores/Gerentes**: Interface para dar feedback estruturado com:
+  - Campo de **Feedback Técnico** (competências e conhecimentos)
+  - Campo de **Feedback Comportamental** (habilidades interpessoais)
+  - Campo de **Fase Emocional** (estado emocional e motivação)
+- Gestão de ciclos de feedback 180° e 360°
+- Acompanhamento de progresso e prazos
+
+### 5. **Login**
 - Interface moderna com identidade FIERGS
 - Validação em tempo real
 - Opções de recuperação de senha
@@ -157,6 +166,12 @@ O sistema suporta 4 perfis diferentes com permissões específicas:
 - [x] Página de login completa
 - [x] Navegação por perfis de usuário
 - [x] Componentes reutilizáveis
+- [x] **Sistema de feedback estruturado** com 3 campos específicos:
+  - [x] **Feedback Técnico**: Avaliação de competências técnicas e conhecimentos
+  - [x] **Feedback Comportamental**: Avaliação de habilidades interpessoais e atitudes
+  - [x] **Fase Emocional**: Observação do estado emocional e motivação do funcionário
+- [x] **Interface para coordenadores/gerentes** darem feedback aos funcionários
+- [x] **Fluxo completo de feedback** com validação e salvamento
 
 ### 🚧 Em Desenvolvimento
 - [ ] Formulário de cadastro de funcionário

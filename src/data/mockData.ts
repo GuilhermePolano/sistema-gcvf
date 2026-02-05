@@ -64,6 +64,18 @@ export interface RespostaFeedback {
   status: 'pendente' | 'em_andamento' | 'concluido'
 }
 
+export interface FeedbackEstruturado {
+  id: number
+  cicloId: number
+  gestorId: number
+  funcionarioId: number
+  feedbackTecnico: string
+  feedbackComportamental: string
+  faseEmocional: string
+  dataFeedback: string
+  status: 'rascunho' | 'enviado'
+}
+
 export interface Reuniao1a1 {
   id: number
   gestorId: number
@@ -314,6 +326,23 @@ export const PDIS_INICIAIS: PDI[] = [
 ]
 
 // ==========================================
+// FEEDBACKS ESTRUTURADOS INICIAIS
+// ==========================================
+export const FEEDBACKS_ESTRUTURADOS_INICIAIS: FeedbackEstruturado[] = [
+  {
+    id: 1,
+    cicloId: 1,
+    gestorId: 2,
+    funcionarioId: 4, // Ana Costa
+    feedbackTecnico: 'Ana demonstra boa evolução técnica desde sua admissão. Tem se destacado no desenvolvimento com React e JavaScript, mostrando capacidade de aprender rapidamente. Recomendo que continue focando nos fundamentos e pratique mais com TypeScript para fortalecer sua base técnica.',
+    feedbackComportamental: 'Excelente postura profissional e grande disposição para aprender. Ana é colaborativa, sempre disposta a ajudar colegas e aceita feedback de forma construtiva. Sua comunicação é clara e ela participa ativamente das reuniões de equipe.',
+    faseEmocional: 'Ana está em uma fase muito positiva, demonstrando entusiasmo pelo trabalho e motivação para crescer na carreira. Não apresenta sinais de estresse e mantém um bom equilíbrio entre desafio e confiança.',
+    dataFeedback: '2026-02-20',
+    status: 'enviado'
+  }
+]
+
+// ==========================================
 // FUNÇÕES HELPER PARA INICIALIZAR DADOS
 // ==========================================
 export function initializeData() {
@@ -337,6 +366,9 @@ export function initializeData() {
   }
   if (!localStorage.getItem('gcvf_respostas')) {
     localStorage.setItem('gcvf_respostas', JSON.stringify([]))
+  }
+  if (!localStorage.getItem('gcvf_feedbacks_estruturados')) {
+    localStorage.setItem('gcvf_feedbacks_estruturados', JSON.stringify(FEEDBACKS_ESTRUTURADOS_INICIAIS))
   }
 }
 

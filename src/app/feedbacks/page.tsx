@@ -243,6 +243,15 @@ export default function FeedbacksPage() {
                   <span className="metric-label">Urgentes</span>
                 </div>
               </div>
+              {user.userRole !== 'funcionario' && (
+                <div className="metric-mini">
+                  <Users size={20} className="text-info" />
+                  <div>
+                    <span className="metric-number">5</span>
+                    <span className="metric-label">Para Avaliar</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Lista de Feedbacks Pendentes */}
@@ -296,6 +305,107 @@ export default function FeedbacksPage() {
                 </div>
               ))}
             </div>
+
+            {/* Seção para Coordenadores/Gerentes - Funcionários para Avaliar */}
+            {user.userRole !== 'funcionario' && (
+              <>
+                <div className="section-divider">
+                  <h3>Funcionários para Avaliar</h3>
+                  <p className="section-subtitle">Forneça feedback para os membros da sua equipe</p>
+                </div>
+
+                <div className="employees-to-evaluate">
+                  {[
+                    {
+                      id: 1,
+                      name: 'João Silva',
+                      role: 'Desenvolvedor Pleno',
+                      cycleName: 'Avaliação Q1 2026',
+                      deadline: '28/02/2026',
+                      status: 'pendente',
+                      lastFeedback: '15/12/2025'
+                    },
+                    {
+                      id: 2,
+                      name: 'Ana Costa',
+                      role: 'Desenvolvedora Júnior',
+                      cycleName: 'Avaliação Q1 2026',
+                      deadline: '28/02/2026',
+                      status: 'concluido',
+                      lastFeedback: '20/02/2026'
+                    },
+                    {
+                      id: 3,
+                      name: 'Pedro Santos',
+                      role: 'Analista de Sistemas',
+                      cycleName: 'Avaliação Q1 2026',
+                      deadline: '28/02/2026',
+                      status: 'pendente',
+                      lastFeedback: '10/12/2025'
+                    },
+                    {
+                      id: 4,
+                      name: 'Carla Oliveira',
+                      role: 'UX Designer',
+                      cycleName: 'Avaliação Q1 2026',
+                      deadline: '28/02/2026',
+                      status: 'urgente',
+                      lastFeedback: '05/11/2025'
+                    },
+                    {
+                      id: 5,
+                      name: 'Lucas Ferreira',
+                      role: 'Desenvolvedor Sênior',
+                      cycleName: 'Avaliação Q1 2026',
+                      deadline: '28/02/2026',
+                      status: 'pendente',
+                      lastFeedback: '18/12/2025'
+                    }
+                  ].map((employee) => (
+                    <div
+                      key={employee.id}
+                      className={`employee-feedback-card ${employee.status === 'urgente' ? 'urgent' : ''} ${employee.status === 'concluido' ? 'completed' : ''}`}
+                    >
+                      <div className="employee-avatar">
+                        <User size={24} />
+                      </div>
+                      <div className="employee-feedback-info">
+                        <div className="employee-header">
+                          <h4>{employee.name}</h4>
+                          <span className={`badge badge-${employee.status === 'concluido' ? 'success' : employee.status === 'urgente' ? 'error' : 'warning'}`}>
+                            {employee.status === 'concluido' ? 'Concluído' : employee.status === 'urgente' ? 'Urgente' : 'Pendente'}
+                          </span>
+                        </div>
+                        <p className="employee-role">{employee.role}</p>
+                        <div className="employee-meta">
+                          <span>
+                            <Calendar size={14} />
+                            Prazo: {employee.deadline}
+                          </span>
+                          <span>
+                            <Clock size={14} />
+                            Último feedback: {employee.lastFeedback}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="employee-actions">
+                        {employee.status === 'concluido' ? (
+                          <button className="btn btn-outline btn-sm">
+                            <Eye size={16} />
+                            Visualizar
+                          </button>
+                        ) : (
+                          <Link href={`/feedbacks/dar-feedback/${employee.id}`} className="btn btn-primary btn-sm">
+                            <MessageSquare size={16} />
+                            Dar Feedback
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -701,6 +811,7 @@ export default function FeedbacksPage() {
         .text-warning { color: var(--warning); }
         .text-success { color: var(--success); }
         .text-error { color: var(--error); }
+        .text-info { color: var(--info); }
 
         /* Feedbacks List */
         .feedbacks-list {
@@ -1153,6 +1264,124 @@ export default function FeedbacksPage() {
           .tabs {
             overflow-x: auto;
           }
+
+          .employee-feedback-card {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .employee-actions .btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        /* Section Divider */
+        .section-divider {
+          margin: var(--spacing-xl) 0 var(--spacing-lg) 0;
+          padding-top: var(--spacing-lg);
+          border-top: 2px solid var(--gray-200);
+        }
+
+        .section-divider h3 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--gray-900);
+          margin-bottom: var(--spacing-xs);
+        }
+
+        .section-subtitle {
+          font-size: 0.875rem;
+          color: var(--gray-600);
+          margin: 0;
+        }
+
+        /* Employees to Evaluate */
+        .employees-to-evaluate {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-md);
+        }
+
+        .employee-feedback-card {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-lg);
+          padding: var(--spacing-lg);
+          background-color: var(--white);
+          border-radius: var(--radius-md);
+          border: 1px solid var(--gray-200);
+          box-shadow: var(--shadow-sm);
+          transition: all 0.2s ease;
+        }
+
+        .employee-feedback-card:hover {
+          box-shadow: var(--shadow-md);
+        }
+
+        .employee-feedback-card.urgent {
+          border-left: 4px solid var(--error);
+          background-color: #FFFBF0;
+        }
+
+        .employee-feedback-card.completed {
+          border-left: 4px solid var(--success);
+          opacity: 0.8;
+        }
+
+        .employee-avatar {
+          width: 48px;
+          height: 48px;
+          background-color: var(--primary-light);
+          color: var(--primary-dark);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .employee-feedback-info {
+          flex: 1;
+        }
+
+        .employee-header {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          margin-bottom: var(--spacing-xs);
+        }
+
+        .employee-header h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--gray-900);
+          margin: 0;
+        }
+
+        .employee-role {
+          font-size: 0.875rem;
+          color: var(--gray-600);
+          margin-bottom: var(--spacing-sm);
+        }
+
+        .employee-meta {
+          display: flex;
+          gap: var(--spacing-lg);
+          flex-wrap: wrap;
+        }
+
+        .employee-meta span {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-xs);
+          font-size: 0.8125rem;
+          color: var(--gray-600);
+        }
+
+        .employee-actions {
+          display: flex;
+          gap: var(--spacing-sm);
         }
       `}</style>
     </MainLayout>
