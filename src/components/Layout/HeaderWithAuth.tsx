@@ -11,6 +11,7 @@ interface HeaderProps {
 
 export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
   const { user, logout } = useAuth()
 
   if (!user) return null
@@ -20,6 +21,36 @@ export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: Heade
       logout()
     }
   }
+
+  // Notificações mockadas
+  const notifications = [
+    {
+      id: 1,
+      title: 'Novo feedback disponível',
+      message: 'Avaliação Q1 2026 está aguardando sua resposta',
+      time: '2 horas atrás',
+      unread: true,
+      type: 'feedback'
+    },
+    {
+      id: 2,
+      title: 'PDI atualizado',
+      message: 'Seu gestor comentou no objetivo "AWS Certification"',
+      time: '1 dia atrás',
+      unread: true,
+      type: 'pdi'
+    },
+    {
+      id: 3,
+      title: 'Reunião agendada',
+      message: '1:1 com Maria Santos - 15/02 às 14h',
+      time: '2 dias atrás',
+      unread: true,
+      type: 'meeting'
+    }
+  ]
+
+  const unreadCount = notifications.filter(n => n.unread).length
 
   return (
     <header className="header">
@@ -39,10 +70,53 @@ export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: Heade
       </div>
 
       <div className="header-right">
-        <button className="icon-button" aria-label="Notificações">
-          <Bell size={20} />
-          <span className="notification-badge">3</span>
-        </button>
+        <div className="notifications-container">
+          <button
+            className="icon-button"
+            aria-label="Notificações"
+            onClick={() => setShowNotifications(!showNotifications)}
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount}</span>
+            )}
+          </button>
+
+          {showNotifications && (
+            <>
+              <div
+                className="menu-overlay"
+                onClick={() => setShowNotifications(false)}
+              />
+              <div className="notifications-dropdown">
+                <div className="notifications-header">
+                  <h3>Notificações</h3>
+                  {unreadCount > 0 && (
+                    <span className="unread-count">{unreadCount} novas</span>
+                  )}
+                </div>
+                <div className="notifications-list">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`notification-item ${notification.unread ? 'unread' : ''}`}
+                    >
+                      <div className="notification-content">
+                        <h4>{notification.title}</h4>
+                        <p>{notification.message}</p>
+                        <span className="notification-time">{notification.time}</span>
+                      </div>
+                      {notification.unread && <div className="unread-dot" />}
+                    </div>
+                  ))}
+                </div>
+                <div className="notifications-footer">
+                  <button className="view-all-btn">Ver todas as notificações</button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
 
         <div className="user-menu-container">
           <button
@@ -174,6 +248,132 @@ export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: Heade
           border-radius: 10px;
           min-width: 16px;
           text-align: center;
+        }
+
+        .notifications-container {
+          position: relative;
+        }
+
+        .notifications-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          background-color: var(--white);
+          border-radius: var(--radius-md);
+          box-shadow: var(--shadow-lg);
+          border: 1px solid var(--gray-200);
+          width: 380px;
+          max-height: 500px;
+          display: flex;
+          flex-direction: column;
+          z-index: 70;
+        }
+
+        .notifications-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: var(--spacing-md) var(--spacing-lg);
+          border-bottom: 1px solid var(--gray-200);
+        }
+
+        .notifications-header h3 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--gray-900);
+          margin: 0;
+        }
+
+        .unread-count {
+          font-size: 0.75rem;
+          color: var(--primary-dark);
+          background-color: var(--primary-light);
+          padding: 2px 8px;
+          border-radius: var(--radius-sm);
+          font-weight: 600;
+        }
+
+        .notifications-list {
+          flex: 1;
+          overflow-y: auto;
+          max-height: 400px;
+        }
+
+        .notification-item {
+          display: flex;
+          align-items: flex-start;
+          gap: var(--spacing-sm);
+          padding: var(--spacing-md) var(--spacing-lg);
+          border-bottom: 1px solid var(--gray-100);
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+          position: relative;
+        }
+
+        .notification-item:hover {
+          background-color: var(--gray-50);
+        }
+
+        .notification-item.unread {
+          background-color: #F0F9FF;
+        }
+
+        .notification-item.unread:hover {
+          background-color: #E0F2FE;
+        }
+
+        .notification-content {
+          flex: 1;
+        }
+
+        .notification-content h4 {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--gray-900);
+          margin: 0 0 4px 0;
+        }
+
+        .notification-content p {
+          font-size: 0.8125rem;
+          color: var(--gray-600);
+          margin: 0 0 4px 0;
+          line-height: 1.4;
+        }
+
+        .notification-time {
+          font-size: 0.75rem;
+          color: var(--gray-500);
+        }
+
+        .unread-dot {
+          width: 8px;
+          height: 8px;
+          background-color: var(--primary-medium);
+          border-radius: 50%;
+          flex-shrink: 0;
+          margin-top: 6px;
+        }
+
+        .notifications-footer {
+          padding: var(--spacing-sm);
+          border-top: 1px solid var(--gray-200);
+        }
+
+        .view-all-btn {
+          width: 100%;
+          padding: var(--spacing-sm);
+          background: none;
+          border: none;
+          color: var(--primary-dark);
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          border-radius: var(--radius-sm);
+          transition: background-color 0.2s ease;
+        }
+
+        .view-all-btn:hover {
+          background-color: var(--primary-light);
         }
 
         .user-menu-container {
@@ -314,6 +514,10 @@ export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: Heade
           .user-info {
             display: none;
           }
+
+          .notifications-dropdown {
+            width: 320px;
+          }
         }
 
         @media (max-width: 768px) {
@@ -327,6 +531,11 @@ export default function HeaderWithAuth({ onMenuToggle, isMobileMenuOpen }: Heade
 
           .entity-badge {
             display: none;
+          }
+
+          .notifications-dropdown {
+            width: calc(100vw - 32px);
+            right: -8px;
           }
         }
       `}</style>
