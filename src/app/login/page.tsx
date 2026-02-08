@@ -121,7 +121,7 @@ export default function LoginPage() {
 
               <div className="form-group">
                 <label htmlFor="email" className="form-label">
-                  Email Corporativo
+                  Login
                 </label>
                 <div className="input-wrapper">
                   <Mail size={20} className="input-icon" />
@@ -473,14 +473,16 @@ export default function LoginPage() {
 
         .input-icon {
           position: absolute;
-          left: 16px;
+          left: 18px;
+          top: 50%;
+          transform: translateY(-50%);
           color: #9CA3AF;
           pointer-events: none;
         }
 
         .form-input {
           width: 100%;
-          padding: 14px 16px 14px 48px;
+          padding: 14px 50px 14px 52px;
           font-size: 1rem;
           border: 2px solid #E5E7EB;
           border-radius: 12px;
@@ -508,7 +510,9 @@ export default function LoginPage() {
 
         .password-toggle {
           position: absolute;
-          right: 16px;
+          right: 18px;
+          top: 50%;
+          transform: translateY(-50%);
           background: none;
           border: none;
           color: #9CA3AF;
