@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
@@ -41,6 +42,7 @@ interface PDIObjective {
 }
 
 export default function PDIPage() {
+  const { user } = useAuth()
   const [expandedObjective, setExpandedObjective] = useState<number | null>(1)
   const [showNewObjectiveModal, setShowNewObjectiveModal] = useState(false)
 
@@ -208,7 +210,7 @@ export default function PDIPage() {
         {/* Header */}
         <div className="page-header">
           <div className="header-info">
-            <h1>Meu PDI - {user.name}</h1>
+            <h1>Meu PDI{user?.funcionario?.nome ? ` - ${user.funcionario.nome}` : ''}</h1>
             <p className="last-update">Última atualização: 28/01/2026</p>
           </div>
           <button

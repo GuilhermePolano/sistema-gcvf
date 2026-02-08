@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
@@ -34,6 +35,7 @@ interface FeedbackReport {
 }
 
 export default function RelatoriosPage() {
+  const { user } = useAuth()
   const [expandedReport, setExpandedReport] = useState<number | null>(1)
   const [filterPeriod, setFilterPeriod] = useState('todos')
   const [activeView, setActiveView] = useState<'individual' | 'equipe'>('individual')
@@ -154,7 +156,7 @@ export default function RelatoriosPage() {
         </div>
 
         {/* Tabs para Gerente/Coordenador */}
-        {user.userRole !== 'funcionario' && (
+        {user && user.perfil !== 'funcionario' && (
           <div className="view-tabs">
             <button
               className={`view-tab ${activeView === 'individual' ? 'active' : ''}`}

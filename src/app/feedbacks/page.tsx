@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   MessageSquare,
   Calendar,
   Users,
+  User,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -46,21 +48,10 @@ interface PendingFeedback {
 }
 
 export default function FeedbacksPage() {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<'meus' | 'ciclos'>('meus')
   const [showNewCycleModal, setShowNewCycleModal] = useState(false)
   const [filterStatus, setFilterStatus] = useState<string>('todos')
-
-  const user: {
-    name: string
-    role: string
-    entity: string
-    userRole: 'funcionario' | 'coordenador' | 'gerente' | 'administrador'
-  } = {
-    name: 'João Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'coordenador'
-  }
 
   // Feedbacks pendentes do usuário
   const pendingFeedbacks: PendingFeedback[] = [
@@ -177,7 +168,7 @@ export default function FeedbacksPage() {
             <h1>Feedbacks</h1>
             <p className="subtitle">Gerencie seus feedbacks e ciclos de avaliação</p>
           </div>
-          {user.userRole !== 'funcionario' && (
+          {user?.perfil !== 'funcionario' && (
             <button
               className="btn btn-primary"
               onClick={() => setShowNewCycleModal(true)}
@@ -202,7 +193,7 @@ export default function FeedbacksPage() {
               </span>
             )}
           </button>
-          {user.userRole !== 'funcionario' && (
+          {user?.perfil !== 'funcionario' && (
             <button
               className={`tab ${activeTab === 'ciclos' ? 'active' : ''}`}
               onClick={() => setActiveTab('ciclos')}
@@ -245,7 +236,7 @@ export default function FeedbacksPage() {
                   <span className="metric-label">Urgentes</span>
                 </div>
               </div>
-              {user.userRole !== 'funcionario' && (
+              {user?.perfil !== 'funcionario' && (
                 <div className="metric-mini">
                   <Users size={20} className="text-info" />
                   <div>
@@ -309,7 +300,7 @@ export default function FeedbacksPage() {
             </div>
 
             {/* Seção para Coordenadores/Gerentes - Funcionários para Avaliar */}
-            {user.userRole !== 'funcionario' && (
+            {user?.perfil !== 'funcionario' && (
               <>
                 <div className="section-divider">
                   <h3>Funcionários para Avaliar</h3>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react'
 
 export default function PerfilPage() {
+  const { user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
 
 
@@ -109,7 +111,13 @@ export default function PerfilPage() {
                 <div className="profile-info">
                   <h2>{profileData.nome}</h2>
                   <p className="cargo">{profileData.cargo}</p>
-                  <span className="badge badge-primary">{user.userRole}</span>
+                  {user && (
+                    <span className="badge badge-primary">
+                      {user.perfil === 'funcionario' ? 'Funcionário' : 
+                       user.perfil === 'coordenador' ? 'Coordenador' : 
+                       user.perfil === 'gerente' ? 'Gerente' : 'Administrador'}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
