@@ -2,6 +2,7 @@
 
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
+import Link from 'next/link'
 import { useState } from 'react'
 import { 
   Plus, 
@@ -107,10 +108,10 @@ export default function FuncionariosPage() {
             <h1>Funcionários</h1>
             <p className="page-subtitle">Gerencie os funcionários da sua equipe</p>
           </div>
-          <button className="btn btn-primary">
+          <Link href="/funcionarios/novo" className="btn btn-primary">
             <Plus size={20} />
             Novo Funcionário
-          </button>
+          </Link>
         </div>
 
         {/* Filtros e Busca */}
@@ -242,11 +243,11 @@ export default function FuncionariosPage() {
                 </div>
 
                 <div className="funcionario-footer">
-                  <button className="btn btn-sm btn-secondary">
+                  <Link href={`/funcionarios/${funcionario.id}`} className="btn btn-sm btn-secondary">
                     <Eye size={16} />
                     Visualizar
-                  </button>
-                  <button className="btn btn-sm btn-primary">
+                  </Link>
+                  <Link href={`/funcionarios/${funcionario.id}/editar`} className="btn btn-sm btn-primary">
                     <Edit size={16} />
                     Editar
                   </button>
