@@ -7,6 +7,10 @@ export async function POST(request: NextRequest) {
   try {
     const { email, senha } = await request.json()
 
+    console.log('=== LOGIN ATTEMPT ===')
+    console.log('Email:', email)
+    console.log('Senha recebida:', senha ? '***' : 'vazia')
+
     if (!email || !senha) {
       return NextResponse.json(
         { error: 'Email e senha são obrigatórios' },
@@ -29,7 +33,10 @@ export async function POST(request: NextRequest) {
       [email]
     )
 
+    console.log('Usuários encontrados:', rows.length)
+
     if (rows.length === 0) {
+      console.log('Nenhum usuário encontrado com email:', email)
       return NextResponse.json(
         { error: 'Credenciais inválidas' },
         { status: 401 }
@@ -37,16 +44,22 @@ export async function POST(request: NextRequest) {
     }
 
     const usuario = rows[0]
+    console.log('Usuário encontrado:', usuario.email)
+    console.log('Hash no banco:', usuario.senha_hash ? usuario.senha_hash.substring(0, 20) + '...' : 'vazio')
 
     // Verificar senha
     const senhaValida = await bcrypt.compare(senha, usuario.senha_hash)
+    console.log('Senha válida:', senhaValida)
 
     if (!senhaValida) {
+      console.log('Senha inválida para:', email)
       return NextResponse.json(
         { error: 'Credenciais inválidas' },
         { status: 401 }
       )
     }
+
+    console.log('Login bem-sucedido para:', email)
 
     // Gerar token JWT
     const token = jwt.sign(

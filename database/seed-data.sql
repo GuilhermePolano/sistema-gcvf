@@ -57,13 +57,13 @@ INSERT INTO cargos (codigo, nome, nivel, descricao) VALUES
 -- ============================================
 INSERT INTO usuarios (email, senha_hash, perfil, ativo) VALUES
 -- Usuário 1: Funcionário (Desenvolvedor Pleno)
-('joao.silva@fiergs.org.br', '$2b$10$rZ5YhkqJ9vXGKxvF5YhkqOZxvF5YhkqJ9vXGKxvF5YhkqJ9vXGKxv', 'funcionario', TRUE),
+('joao.silva@fiergs.org.br', '$2b$10$DoNBF24uN5kUA9rchBoZ1O/MjqflRn1y2shlPErbJafgzvQQJNEQm', 'funcionario', TRUE),
 
 -- Usuário 2: Coordenador (Coordenador de TI)
-('maria.santos@fiergs.org.br', '$2b$10$rZ5YhkqJ9vXGKxvF5YhkqOZxvF5YhkqJ9vXGKxvF5YhkqJ9vXGKxv', 'coordenador', TRUE),
+('maria.santos@fiergs.org.br', '$2b$10$/kZQkE2c6hLqZxm/2zjPQOr91u67mEBelbpsjbUU0rZvI6BgUvQKi', 'coordenador', TRUE),
 
 -- Usuário 3: Administrador (Gerente de RH)
-('carlos.oliveira@fiergs.org.br', '$2b$10$rZ5YhkqJ9vXGKxvF5YhkqOZxvF5YhkqJ9vXGKxvF5YhkqJ9vXGKxv', 'administrador', TRUE);
+('carlos.oliveira@fiergs.org.br', '$2b$10$lciSYtdfCmf.gl9206QSKeZejZ3xYpT7198MgYarOHR/Bv381eCj6', 'administrador', TRUE);
 
 -- ============================================
 -- FUNCIONÁRIOS DE TESTE
