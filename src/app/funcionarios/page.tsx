@@ -250,7 +250,7 @@ export default function FuncionariosPage() {
                   <Link href={`/funcionarios/${funcionario.id}/editar`} className="btn btn-sm btn-primary">
                     <Edit size={16} />
                     Editar
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
