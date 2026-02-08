@@ -1,8 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Eye, EyeOff, Lock, Mail, AlertCircle, Building2, Users, Target, TrendingUp, Shield } from 'lucide-react'
+
+interface TestUser {
+  id: number
+  email: string
+  nome: string
+  perfil: string
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,7 +18,30 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showTestUsers, setShowTestUsers] = useState(false)
+  const [testUsers, setTestUsers] = useState<TestUser[]>([])
+  const [loadingUsers, setLoadingUsers] = useState(false)
   const { login } = useAuth()
+
+  useEffect(() => {
+    if (showTestUsers && testUsers.length === 0) {
+      loadTestUsers()
+    }
+  }, [showTestUsers])
+
+  const loadTestUsers = async () => {
+    setLoadingUsers(true)
+    try {
+      const response = await fetch('/api/auth/test-users')
+      const data = await response.json()
+      if (data.users) {
+        setTestUsers(data.users)
+      }
+    } catch (err) {
+      console.error('Erro ao carregar usuários de teste:', err)
+    } finally {
+      setLoadingUsers(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,6 +60,24 @@ export default function LoginPage() {
   const quickLogin = (userEmail: string) => {
     setEmail(userEmail)
     setSenha('Teste@2024')
+  }
+
+  const getPerfilBadgeClass = (perfil: string) => {
+    const perfilLower = perfil.toLowerCase()
+    if (perfilLower.includes('funcionario')) return 'funcionario'
+    if (perfilLower.includes('coordenador')) return 'coordenador'
+    if (perfilLower.includes('gerente')) return 'gerente'
+    if (perfilLower.includes('administrador')) return 'administrador'
+    return 'funcionario'
+  }
+
+  const getPerfilInitial = (perfil: string) => {
+    const perfilLower = perfil.toLowerCase()
+    if (perfilLower.includes('funcionario')) return 'F'
+    if (perfilLower.includes('coordenador')) return 'C'
+    if (perfilLower.includes('gerente')) return 'G'
+    if (perfilLower.includes('administrador')) return 'A'
+    return 'F'
   }
 
   return (
@@ -196,45 +244,36 @@ export default function LoginPage() {
               
               {showTestUsers && (
                 <div className="test-users-list">
-                  <button
-                    type="button"
-                    className="test-user-btn"
-                    onClick={() => quickLogin('joao.silva@fiergs.org.br')}
-                  >
-                    <div className="test-user-badge funcionario">F</div>
-                    <div className="test-user-info">
-                      <strong>João Silva</strong>
-                      <span>Funcionário</span>
+                  {loadingUsers ? (
+                    <div className="loading-users">
+                      <div className="spinner-small"></div>
+                      <span>Carregando usuários...</span>
                     </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="test-user-btn"
-                    onClick={() => quickLogin('maria.santos@fiergs.org.br')}
-                  >
-                    <div className="test-user-badge coordenador">C</div>
-                    <div className="test-user-info">
-                      <strong>Maria Santos</strong>
-                      <span>Coordenador</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="test-user-btn"
-                    onClick={() => quickLogin('carlos.oliveira@fiergs.org.br')}
-                  >
-                    <div className="test-user-badge administrador">A</div>
-                    <div className="test-user-info">
-                      <strong>Carlos Oliveira</strong>
-                      <span>Administrador</span>
-                    </div>
-                  </button>
-
-                  <p className="test-users-note">
-                    Senha para todos: <code>Teste@2024</code>
-                  </p>
+                  ) : testUsers.length > 0 ? (
+                    <>
+                      {testUsers.map((user) => (
+                        <button
+                          key={user.id}
+                          type="button"
+                          className="test-user-btn"
+                          onClick={() => quickLogin(user.email)}
+                        >
+                          <div className={`test-user-badge ${getPerfilBadgeClass(user.perfil)}`}>
+                            {getPerfilInitial(user.perfil)}
+                          </div>
+                          <div className="test-user-info">
+                            <strong>{user.nome}</strong>
+                            <span>{user.perfil}</span>
+                          </div>
+                        </button>
+                      ))}
+                      <p className="test-users-note">
+                        Senha para todos: <code>Teste@2024</code>
+                      </p>
+                    </>
+                  ) : (
+                    <p className="no-users">Nenhum usuário de teste disponível</p>
+                  )}
                 </div>
               )}
             </div>
@@ -456,7 +495,7 @@ export default function LoginPage() {
         .form-group {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
 
         .form-label {
@@ -473,7 +512,7 @@ export default function LoginPage() {
 
         .input-icon {
           position: absolute;
-          left: 18px;
+          left: 16px;
           top: 50%;
           transform: translateY(-50%);
           color: #9CA3AF;
@@ -482,7 +521,7 @@ export default function LoginPage() {
 
         .form-input {
           width: 100%;
-          padding: 14px 50px 14px 52px;
+          padding: 14px 50px 14px 48px;
           font-size: 1rem;
           border: 2px solid #E5E7EB;
           border-radius: 12px;
@@ -490,6 +529,7 @@ export default function LoginPage() {
           color: #1F2937;
           transition: all 0.2s ease;
           font-family: inherit;
+          text-align: left;
         }
 
         .form-input:focus {
@@ -655,8 +695,38 @@ export default function LoginPage() {
           background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
         }
 
+        .test-user-badge.gerente {
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+
         .test-user-badge.administrador {
           background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+        }
+
+        .loading-users {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 20px;
+          color: #6B7280;
+          font-size: 0.875rem;
+        }
+
+        .spinner-small {
+          width: 16px;
+          height: 16px;
+          border: 2px solid #E5E7EB;
+          border-top-color: #003366;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        }
+
+        .no-users {
+          text-align: center;
+          padding: 20px;
+          color: #6B7280;
+          font-size: 0.875rem;
         }
 
         .test-user-info {
