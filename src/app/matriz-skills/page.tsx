@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import {
@@ -16,12 +17,7 @@ export default function MatrizSkillsPage() {
   const [filtroEntidade, setFiltroEntidade] = useState('Todas')
   const [filtroSetor, setFiltroSetor] = useState('Todos')
 
-  const user = {
-    name: 'Maria Gerente',
-    role: 'Gerente',
-    entity: 'FIERGS - GINFO',
-    userRole: 'gerente' as const
-  }
+
 
   const skills = ['JavaScript', 'React', 'Node.js', 'Python', 'Docker', 'AWS', 'SQL', 'Git']
 
@@ -73,7 +69,8 @@ export default function MatrizSkillsPage() {
   }).filter(g => g.isGap)
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="matriz-page">
         {/* Header */}
         <div className="page-header">
@@ -496,6 +493,7 @@ export default function MatrizSkillsPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

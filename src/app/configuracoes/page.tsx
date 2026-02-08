@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   Settings,
@@ -49,12 +50,7 @@ export default function ConfiguracoesPage() {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
-  const user = {
-    name: 'Maria Gerente',
-    role: 'Gerente de TI',
-    entity: 'FIERGS - GINFO',
-    userRole: 'gerente' as const
-  }
+
 
   const [categories, setCategories] = useState<Category[]>([
     { id: 1, name: 'Competências Técnicas', description: 'Avaliação de habilidades técnicas e conhecimento', questionCount: 12, active: true },
@@ -128,7 +124,8 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="configuracoes-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -1167,6 +1164,7 @@ export default function ConfiguracoesPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

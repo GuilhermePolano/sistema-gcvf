@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   TrendingUp,
@@ -13,12 +14,7 @@ import {
 } from 'lucide-react'
 
 export default function RelatoriosPessoalPage() {
-  const user = {
-    name: 'Joao Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'funcionario' as const
-  }
+
 
   const metricas = [
     {
@@ -75,7 +71,8 @@ export default function RelatoriosPessoalPage() {
   ]
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="relatorios-page">
         {/* Header */}
         <div className="page-header">
@@ -548,6 +545,7 @@ export default function RelatoriosPessoalPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

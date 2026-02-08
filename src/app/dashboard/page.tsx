@@ -1,24 +1,17 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { 
   User, 
   Target, 
   Calendar, 
-  TrendingUp, 
   AlertCircle,
-  CheckCircle,
   Clock
 } from 'lucide-react'
 
 export default function DashboardPage() {
   // Dados mockados - em produção viriam de uma API
-  const user = {
-    name: 'João Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'funcionario' as const
-  }
 
   const dashboardData = {
     status: 'ATIVO',
@@ -72,8 +65,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <MainLayout user={user}>
-      <div className="dashboard">
+    <ProtectedRoute>
+      <MainLayout>
+        <div className="dashboard">
         {/* Breadcrumb */}
         <div className="breadcrumb">
           <span>Home</span>
@@ -386,7 +380,8 @@ export default function DashboardPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }
 

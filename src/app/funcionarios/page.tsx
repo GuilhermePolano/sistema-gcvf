@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import { 
@@ -17,12 +18,6 @@ export default function FuncionariosPage() {
   const [showFilters, setShowFilters] = useState(false)
 
   // Dados mockados - em produção viriam de uma API
-  const user = {
-    name: 'Maria Coordenadora',
-    role: 'Coordenadora',
-    entity: 'FIERGS - GINFO',
-    userRole: 'coordenador' as const
-  }
 
   const funcionarios = [
     {
@@ -96,8 +91,9 @@ export default function FuncionariosPage() {
   }
 
   return (
-    <MainLayout user={user}>
-      <div className="funcionarios-page">
+    <ProtectedRoute requiredRoles={['coordenador', 'gerente', 'administrador']}>
+      <MainLayout>
+        <div className="funcionarios-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
           <span>Equipe</span>
@@ -532,6 +528,7 @@ export default function FuncionariosPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

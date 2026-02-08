@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   Target,
@@ -43,12 +44,7 @@ export default function PDIPage() {
   const [expandedObjective, setExpandedObjective] = useState<number | null>(1)
   const [showNewObjectiveModal, setShowNewObjectiveModal] = useState(false)
 
-  const user = {
-    name: 'João Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'funcionario' as const
-  }
+
 
   const [objectives, setObjectives] = useState<PDIObjective[]>([
     {
@@ -197,7 +193,8 @@ export default function PDIPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="pdi-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -994,6 +991,7 @@ export default function PDIPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

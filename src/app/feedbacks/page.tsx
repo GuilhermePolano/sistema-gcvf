@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   MessageSquare,
@@ -160,7 +161,8 @@ export default function FeedbacksPage() {
     : feedbackCycles.filter(c => c.status === filterStatus)
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="feedbacks-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -1384,6 +1386,7 @@ export default function FeedbacksPage() {
           gap: var(--spacing-sm);
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

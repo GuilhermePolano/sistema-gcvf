@@ -1,76 +1,28 @@
 'use client'
 
 import { useState } from 'react'
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  })
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<{[key: string]: string}>({})
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-    
-    // Limpar erro do campo quando usuário começar a digitar
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
-  }
-
-  const validateForm = () => {
-    const newErrors: {[key: string]: string} = {}
-
-    if (!formData.email) {
-      newErrors.email = 'Email é obrigatório'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido'
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Senha é obrigatória'
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Senha deve ter pelo menos 6 caracteres'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { login } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!validateForm()) {
-      return
-    }
+    setError('')
+    setLoading(true)
 
-    setIsLoading(true)
-    
     try {
-      // Simular chamada de API
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      // Em produção, aqui seria feita a autenticação real
-      console.log('Login attempt:', formData)
-      
-      // Redirecionar para dashboard
-      window.location.href = '/dashboard'
-      
-    } catch (error) {
-      setErrors({ general: 'Erro ao fazer login. Tente novamente.' })
+      await login(email, senha)
+    } catch (err: any) {
+      setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
@@ -91,9 +43,10 @@ export default function LoginPage() {
 
           {/* Formulário de Login */}
           <form onSubmit={handleSubmit} className="login-form">
-            {errors.general && (
+            {error && (
               <div className="error-message general-error">
-                {errors.general}
+                <AlertCircle size={16} />
+                {error}
               </div>
             )}
 
@@ -106,73 +59,49 @@ export default function LoginPage() {
                 <input
                   type="email"
                   id="email"
-                  name="email"
-                  className={`form-input ${errors.email ? 'error' : ''}`}
+                  className="form-input"
                   placeholder="seu.email@fiergs.org.br"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  disabled={isLoading}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                  required
                 />
               </div>
-              {errors.email && (
-                <div className="error-message">{errors.email}</div>
-              )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="password" className="form-label">
+              <label htmlFor="senha" className="form-label">
                 Senha
               </label>
               <div className="input-container">
                 <Lock size={20} className="input-icon" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  className={`form-input ${errors.password ? 'error' : ''}`}
+                  id="senha"
+                  className="form-input"
                   placeholder="Digite sua senha"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  disabled={isLoading}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  disabled={loading}
+                  required
                 />
                 <button
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLoading}
+                  disabled={loading}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {errors.password && (
-                <div className="error-message">{errors.password}</div>
-              )}
-            </div>
-
-            <div className="form-options">
-              <label className="checkbox-container">
-                <input
-                  type="checkbox"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleInputChange}
-                  disabled={isLoading}
-                />
-                <span className="checkbox-checkmark"></span>
-                Lembrar-me
-              </label>
-
-              <a href="/esqueci-senha" className="forgot-password">
-                Esqueci minha senha
-              </a>
             </div>
 
             <button 
               type="submit" 
-              className={`btn btn-primary btn-login ${isLoading ? 'loading' : ''}`}
-              disabled={isLoading}
+              className={`btn btn-primary btn-login ${loading ? 'loading' : ''}`}
+              disabled={loading}
             >
-              {isLoading ? (
+              {loading ? (
                 <>
                   <div className="spinner"></div>
                   Entrando...
@@ -182,6 +111,28 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+
+          {/* Usuários de Teste */}
+          <div className="test-users-section">
+            <p className="test-users-title">👤 Usuários de Teste:</p>
+            <div className="test-users-list">
+              <div className="test-user-item">
+                <strong>Funcionário:</strong>
+                <code>joao.silva@fiergs.org.br</code>
+                <code>Teste@2024</code>
+              </div>
+              <div className="test-user-item">
+                <strong>Coordenador:</strong>
+                <code>maria.santos@fiergs.org.br</code>
+                <code>Teste@2024</code>
+              </div>
+              <div className="test-user-item">
+                <strong>Administrador:</strong>
+                <code>carlos.oliveira@fiergs.org.br</code>
+                <code>Teste@2024</code>
+              </div>
+            </div>
+          </div>
 
           {/* Informações de Suporte */}
           <div className="login-footer">
@@ -252,7 +203,7 @@ export default function LoginPage() {
           box-shadow: var(--shadow-lg);
           padding: var(--spacing-2xl);
           width: 100%;
-          max-width: 400px;
+          max-width: 420px;
           border: 1px solid var(--gray-200);
         }
 
@@ -335,61 +286,6 @@ export default function LoginPage() {
           opacity: 0.5;
         }
 
-        .form-options {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-size: 0.875rem;
-        }
-
-        .checkbox-container {
-          display: flex;
-          align-items: center;
-          gap: var(--spacing-sm);
-          cursor: pointer;
-          user-select: none;
-        }
-
-        .checkbox-container input[type="checkbox"] {
-          display: none;
-        }
-
-        .checkbox-checkmark {
-          width: 16px;
-          height: 16px;
-          border: 2px solid var(--gray-400);
-          border-radius: 3px;
-          position: relative;
-          transition: all 0.2s ease;
-        }
-
-        .checkbox-container input[type="checkbox"]:checked + .checkbox-checkmark {
-          background-color: var(--primary-dark);
-          border-color: var(--primary-dark);
-        }
-
-        .checkbox-container input[type="checkbox"]:checked + .checkbox-checkmark::after {
-          content: '✓';
-          position: absolute;
-          top: -2px;
-          left: 2px;
-          color: var(--white);
-          font-size: 12px;
-          font-weight: bold;
-        }
-
-        .forgot-password {
-          color: var(--primary-medium);
-          text-decoration: none;
-          font-weight: 500;
-          transition: color 0.2s ease;
-        }
-
-        .forgot-password:hover {
-          color: var(--primary-dark);
-          text-decoration: underline;
-        }
-
         .btn-login {
           width: 100%;
           padding: 16px;
@@ -397,6 +293,10 @@ export default function LoginPage() {
           font-weight: 600;
           margin-top: var(--spacing-md);
           position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: var(--spacing-sm);
         }
 
         .btn-login.loading {
@@ -411,7 +311,6 @@ export default function LoginPage() {
           border-top: 2px solid currentColor;
           border-radius: 50%;
           animation: spin 1s linear infinite;
-          margin-right: var(--spacing-sm);
         }
 
         @keyframes spin {
@@ -421,24 +320,65 @@ export default function LoginPage() {
 
         .error-message {
           color: var(--error);
-          font-size: 0.75rem;
-          margin-top: var(--spacing-xs);
+          font-size: 0.875rem;
         }
 
         .general-error {
           background-color: #FEF2F2;
           border: 1px solid #FECACA;
           border-radius: var(--radius-sm);
-          padding: var(--spacing-sm);
+          padding: var(--spacing-md);
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        .test-users-section {
+          margin-top: var(--spacing-2xl);
+          padding-top: var(--spacing-lg);
+          border-top: 1px solid var(--gray-200);
+        }
+
+        .test-users-title {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--gray-700);
           margin-bottom: var(--spacing-md);
-          text-align: center;
+        }
+
+        .test-users-list {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-md);
+        }
+
+        .test-user-item {
+          background-color: var(--gray-50);
+          padding: var(--spacing-sm);
+          border-radius: var(--radius-sm);
+          font-size: 0.75rem;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .test-user-item strong {
+          color: var(--gray-700);
+          font-size: 0.8125rem;
+        }
+
+        .test-user-item code {
+          background-color: var(--white);
+          padding: 4px 8px;
+          border-radius: 3px;
+          border: 1px solid var(--gray-200);
+          font-family: 'Courier New', monospace;
+          color: var(--primary-dark);
         }
 
         .login-footer {
-          margin-top: var(--spacing-2xl);
+          margin-top: var(--spacing-lg);
           text-align: center;
-          padding-top: var(--spacing-lg);
-          border-top: 1px solid var(--gray-200);
         }
 
         .support-text {

@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import {
@@ -52,12 +53,7 @@ export default function NovoFuncionarioPage() {
     nivel: 0
   })
 
-  const user = {
-    name: 'Maria Coordenadora',
-    role: 'Coordenadora',
-    entity: 'FIERGS - GINFO',
-    userRole: 'coordenador' as const
-  }
+
 
   const niveis = ['Estagiário', 'Júnior', 'Pleno', 'Sênior']
   const areas = ['Técnico', 'Negócios']
@@ -193,7 +189,8 @@ export default function NovoFuncionarioPage() {
   }, {} as {[key: string]: Stack[]})
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="novo-funcionario-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -805,6 +802,7 @@ export default function NovoFuncionarioPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

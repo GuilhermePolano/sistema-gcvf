@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   FileText,
@@ -37,12 +38,7 @@ export default function RelatoriosPage() {
   const [filterPeriod, setFilterPeriod] = useState('todos')
   const [activeView, setActiveView] = useState<'individual' | 'equipe'>('individual')
 
-  const user = {
-    name: 'João Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'funcionario' as const
-  }
+
 
   const reports: FeedbackReport[] = [
     {
@@ -135,7 +131,8 @@ export default function RelatoriosPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="relatorios-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -957,6 +954,7 @@ export default function RelatoriosPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import {
@@ -32,12 +33,7 @@ export default function UsuariosPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filtroPerfil, setFiltroPerfil] = useState('todos')
 
-  const user = {
-    name: 'Admin Sistema',
-    role: 'Administrador',
-    entity: 'FIERGS',
-    userRole: 'administrador' as const
-  }
+
 
   const usuarios: Usuario[] = [
     { id: 1, nome: 'Joao Silva', email: 'joao.silva@fiergs.org.br', perfil: 'funcionario', entidade: 'FIERGS', setor: 'GINFO', status: 'ativo', ultimoAcesso: '02/02/2026 14:30' },
@@ -77,7 +73,8 @@ export default function UsuariosPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="usuarios-page">
         {/* Header */}
         <div className="page-header">
@@ -449,6 +446,7 @@ export default function UsuariosPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

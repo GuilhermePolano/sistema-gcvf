@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import {
@@ -32,12 +33,7 @@ interface Ciclo {
 export default function CiclosPage() {
   const [filtroStatus, setFiltroStatus] = useState('todos')
 
-  const user = {
-    name: 'Maria Coordenadora',
-    role: 'Coordenadora',
-    entity: 'FIERGS - GINFO',
-    userRole: 'coordenador' as const
-  }
+
 
   const ciclos: Ciclo[] = [
     {
@@ -106,7 +102,8 @@ export default function CiclosPage() {
     : ciclos.filter(c => c.status === filtroStatus)
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="ciclos-page">
         {/* Header */}
         <div className="page-header">
@@ -434,6 +431,7 @@ export default function CiclosPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

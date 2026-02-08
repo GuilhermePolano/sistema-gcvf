@@ -1,20 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import Header from './Header'
+import { useAuth } from '@/contexts/AuthContext'
+import HeaderWithAuth from './HeaderWithAuth'
 import Sidebar from './Sidebar'
 
 interface MainLayoutProps {
   children: React.ReactNode
-  user: {
-    name: string
-    role: string
-    entity: string
-    userRole: 'funcionario' | 'coordenador' | 'gerente' | 'administrador'
-  }
 }
 
-export default function MainLayout({ children, user }: MainLayoutProps) {
+export default function MainLayout({ children }: MainLayoutProps) {
+  const { user } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleMenuToggle = () => {
@@ -23,6 +19,11 @@ export default function MainLayout({ children, user }: MainLayoutProps) {
 
   const handleOverlayClick = () => {
     setIsMobileMenuOpen(false)
+  }
+
+  // Se não houver usuário autenticado, não renderiza nada (será redirecionado)
+  if (!user) {
+    return null
   }
 
   return (
@@ -34,13 +35,12 @@ export default function MainLayout({ children, user }: MainLayoutProps) {
 
       {/* Sidebar */}
       <div className={`sidebar-container ${isMobileMenuOpen ? 'open' : ''}`}>
-        <Sidebar userRole={user.userRole} user={user} />
+        <Sidebar userRole={user.perfil} user={user} />
       </div>
 
       {/* Main Content Area */}
       <div className="content-area">
-        <Header
-          user={user}
+        <HeaderWithAuth
           onMenuToggle={handleMenuToggle}
           isMobileMenuOpen={isMobileMenuOpen}
         />

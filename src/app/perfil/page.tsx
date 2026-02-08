@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import {
   User,
@@ -22,12 +23,7 @@ import {
 export default function PerfilPage() {
   const [isEditing, setIsEditing] = useState(false)
 
-  const user = {
-    name: 'João Silva',
-    role: 'Desenvolvedor Pleno',
-    entity: 'FIERGS - GINFO',
-    userRole: 'coordenador' as const
-  }
+
 
   const [profileData, setProfileData] = useState({
     nome: 'João Silva',
@@ -70,7 +66,8 @@ export default function PerfilPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="perfil-page">
         {/* Header */}
         <div className="page-header">
@@ -611,6 +608,7 @@ export default function PerfilPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

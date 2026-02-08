@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import {
@@ -39,12 +40,7 @@ export default function AuditoriaPage() {
   const [filtroTipo, setFiltroTipo] = useState('todos')
   const [filtroData, setFiltroData] = useState('hoje')
 
-  const user = {
-    name: 'Admin Sistema',
-    role: 'Administrador',
-    entity: 'FIERGS',
-    userRole: 'administrador' as const
-  }
+
 
   const logs: LogEntry[] = [
     { id: 1, timestamp: '02/02/2026 15:32:45', usuario: 'joao.silva@fiergs.org.br', acao: 'Login realizado', tipo: 'login', modulo: 'Autenticacao', detalhes: 'Login bem-sucedido via SSO', ip: '192.168.1.100', severidade: 'info' },
@@ -91,7 +87,8 @@ export default function AuditoriaPage() {
   })
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="auditoria-page">
         {/* Header */}
         <div className="page-header">
@@ -438,6 +435,7 @@ export default function AuditoriaPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

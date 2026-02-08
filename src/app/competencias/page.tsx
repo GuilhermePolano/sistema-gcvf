@@ -1,5 +1,6 @@
 'use client'
 
+import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/components/Layout/MainLayout'
 import { useState } from 'react'
 import { 
@@ -20,12 +21,7 @@ export default function CompetenciasPage() {
   })
 
   // Dados mockados - em produção viriam de uma API
-  const user = {
-    name: 'Maria Gerente',
-    role: 'Gerente',
-    entity: 'FIERGS - GINFO',
-    userRole: 'gerente' as const
-  }
+
 
   const tecnologias = [
     'JavaScript', 'React', 'Node.js', 'Python', 'Docker', 'AWS'
@@ -167,7 +163,8 @@ export default function CompetenciasPage() {
   }
 
   return (
-    <MainLayout user={user}>
+    <ProtectedRoute>
+      <MainLayout>
       <div className="competencias-page">
         {/* Breadcrumb */}
         <div className="breadcrumb">
@@ -724,6 +721,7 @@ export default function CompetenciasPage() {
           }
         }
       `}</style>
-    </MainLayout>
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

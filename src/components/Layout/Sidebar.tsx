@@ -31,9 +31,14 @@ import styles from './Sidebar.module.css'
 interface SidebarProps {
   userRole: 'funcionario' | 'coordenador' | 'gerente' | 'administrador'
   user?: {
-    name: string
-    role: string
-    entity: string
+    id: number
+    email: string
+    perfil: 'funcionario' | 'coordenador' | 'gerente' | 'administrador'
+    funcionario?: {
+      nome: string
+      cargo: string
+      entidade: string
+    }
   }
 }
 
@@ -315,7 +320,7 @@ export default function Sidebar({ userRole, user }: SidebarProps) {
       </nav>
 
       {/* User Section */}
-      {user && (
+      {user && user.funcionario && (
         <div className={styles.sidebarFooter}>
           <div className={styles.userSection}>
             <div className={styles.userAvatar}>
@@ -323,8 +328,8 @@ export default function Sidebar({ userRole, user }: SidebarProps) {
             </div>
             {!isCollapsed && (
               <div className={styles.userDetails}>
-                <span className={styles.userName}>{user.name}</span>
-                <span className={styles.userMeta}>{user.role} - {user.entity}</span>
+                <span className={styles.userName}>{user.funcionario.nome}</span>
+                <span className={styles.userMeta}>{user.funcionario.cargo} - {user.funcionario.entidade}</span>
               </div>
             )}
             {!isCollapsed && (
