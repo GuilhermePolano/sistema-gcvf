@@ -10,7 +10,23 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  connectTimeout: 60000, // 60 segundos
+  acquireTimeout: 60000, // 60 segundos
+  timeout: 60000, // 60 segundos
   charset: 'utf8mb4'
 })
+
+// Testar conexão ao iniciar
+pool.getConnection()
+  .then(connection => {
+    console.log('✅ Conexão com banco de dados estabelecida com sucesso!')
+    console.log(`📊 Database: ${process.env.DB_NAME}`)
+    console.log(`🔌 Host: ${process.env.DB_HOST}:${process.env.DB_PORT}`)
+    connection.release()
+  })
+  .catch(err => {
+    console.error('❌ Erro ao conectar ao banco de dados:', err.message)
+    console.error('Verifique se o MariaDB está rodando e as credenciais estão corretas')
+  })
 
 export default pool
